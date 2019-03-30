@@ -17,6 +17,7 @@ import static org.openchat.infrastructure.UserParser.jsonWith;
 public class LoginApi {
 
     private static final String DEFAULT_VALUE = "";
+
     private UserRepository userRepository;
 
     public LoginApi(UserRepository userRepository) {
@@ -26,14 +27,21 @@ public class LoginApi {
     public String login(Request request, Response response) {
         CredentialsDto credentials = credentialsDtoFrom(request);
         Optional<User> user = userRepository.fetchWith(credentials);
-        if (user.isPresent()) {
-            response.status(OK_200);
-            response.type("application/json");
-            return jsonWith(user.get());
-        } else {
-            response.status(NOT_FOUND_404);
-            return "Invalid credentials.";
-        }
+        if (user.isPresent())
+            return okResponse(response, user);
+        else
+            return notFoundResponse(response);
+    }
+
+    private String okResponse(Response response, Optional<User> user) {
+        response.status(OK_200);
+        response.type("application/json");
+        return jsonWith(user.get());
+    }
+
+    private String notFoundResponse(Response response) {
+        response.status(NOT_FOUND_404);
+        return "Invalid credentials.";
     }
 
     private CredentialsDto credentialsDtoFrom(Request request) {

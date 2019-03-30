@@ -27,13 +27,21 @@ public class UsersApi {
         RegistrationDto registrationDto = registrationDtoFrom(request);
         try {
             User user = userService.createFrom(registrationDto);
-            response.status(CREATED_201);
-            response.type("application/json");
-            return jsonWith(user);
+            return createdResponse(response, user);
         } catch (UsernameAlreadyInUseException e) {
-            response.status(BAD_REQUEST_400);
-            return "Username already in use.";
+            return badRequestResponse(response);
         }
+    }
+
+    private String createdResponse(Response response, User user) {
+        response.status(CREATED_201);
+        response.type("application/json");
+        return jsonWith(user);
+    }
+
+    private String badRequestResponse(Response response) {
+        response.status(BAD_REQUEST_400);
+        return "Username already in use.";
     }
 
     private RegistrationDto registrationDtoFrom(Request request) {

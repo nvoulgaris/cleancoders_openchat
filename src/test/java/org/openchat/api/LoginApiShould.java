@@ -4,7 +4,6 @@ import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.openchat.domain.user.CredentialsDto;
 import org.openchat.domain.user.User;
 import org.openchat.domain.user.UserRepository;
@@ -17,6 +16,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class LoginApiShould {
 
@@ -38,7 +38,7 @@ public class LoginApiShould {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
         credentialsDto = new CredentialsDto(USERNAME, PASSWORD);
         user = new User(ID, USERNAME, PASSWORD, ABOUT);
         when(request.body()).thenReturn(jsonWith(credentialsDto));
