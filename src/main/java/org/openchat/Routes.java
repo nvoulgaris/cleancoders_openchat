@@ -1,6 +1,8 @@
 package org.openchat;
 
 import org.openchat.api.UsersApi;
+import org.openchat.domain.user.UserIdGenerator;
+import org.openchat.domain.user.UserRepository;
 import org.openchat.domain.user.UserService;
 
 import static spark.Spark.get;
@@ -9,11 +11,15 @@ import static spark.Spark.post;
 
 public class Routes {
 
+    private UserRepository userRepository;
+    private UserIdGenerator userIdGenerator;
     private UserService userService;
     private UsersApi usersApi;
 
     public void create() {
-        userService = new UserService();
+        userRepository = new UserRepository();
+        userIdGenerator = new UserIdGenerator();
+        userService = new UserService(userRepository, userIdGenerator);
         usersApi = new UsersApi(userService);
         swaggerRoutes();
         openchatRoutes();

@@ -1,7 +1,32 @@
 package org.openchat.domain.user;
 
 public class UserService {
+    private UserRepository userRepository;
+    private UserIdGenerator userIdGenerator;
+
+    public UserService(UserRepository userRepository, UserIdGenerator userIdGenerator) {
+        this.userRepository = userRepository;
+        this.userIdGenerator = userIdGenerator;
+    }
+
     public User createFrom(RegistrationDto registrationDto) throws UsernameAlreadyInUseException {
-        throw new UnsupportedOperationException();
+        validateUsernameOf(registrationDto);
+        User user = userFrom(registrationDto);
+        userRepository.save(user);
+        return user;
+    }
+
+    private void validateUsernameOf(RegistrationDto registrationDto) {
+        if (userRepository.alreadyInUse(registrationDto.getUsername()))
+            throw new UsernameAlreadyInUseException();
+    }
+
+    private User userFrom(RegistrationDto registrationDto) {
+        return new User(
+                userIdGenerator.next(),
+                registrationDto.getUsername(),
+                registrationDto.getPassword(),
+                registrationDto.getAbout()
+        );
     }
 }
