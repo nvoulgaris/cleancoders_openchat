@@ -45,7 +45,7 @@ Response:
 
 **Failure**
 Status: BAD_REQUEST - 400
-Response: "Invalid credentials."
+Response: "Invalid credentialsDto."
 
 
 ## Create Post

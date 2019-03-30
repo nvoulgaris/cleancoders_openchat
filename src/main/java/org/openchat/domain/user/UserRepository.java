@@ -2,6 +2,7 @@ package org.openchat.domain.user;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserRepository {
 
@@ -17,5 +18,17 @@ public class UserRepository {
 
     public void save(User user) {
         users.put(user.getUsername(), user);
+    }
+
+    public Optional<User> fetchWith(CredentialsDto credentials) {
+        User user = users.get(credentials.getUsername());
+        if (user == null || invalidPasswordFor(user, credentials))
+            return Optional.empty();
+        else
+            return Optional.of(user);
+    }
+
+    private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
+        return !user.getPassword().equals(credentials.getPassword());
     }
 }

@@ -15,7 +15,7 @@ import static org.openchat.infrastructure.UserParser.jsonWith;
 
 public class UsersApi {
 
-    public static final String DEFAULT_VALUE = "";
+    private static final String DEFAULT_VALUE = "";
 
     private UserService userService;
 
