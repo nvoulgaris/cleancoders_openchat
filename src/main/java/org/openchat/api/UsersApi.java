@@ -9,8 +9,11 @@ import org.openchat.domain.user.UsernameAlreadyInUseException;
 import spark.Request;
 import spark.Response;
 
+import java.util.List;
+
 import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
 import static org.openchat.infrastructure.UserParser.jsonWith;
 
 public class UsersApi {
@@ -31,6 +34,14 @@ public class UsersApi {
         } catch (UsernameAlreadyInUseException e) {
             return badRequestResponse(response);
         }
+    }
+
+    public String allUsers(Request request, Response response) {
+        List<User> users = userService.allUsers();
+
+        response.status(OK_200);
+        response.type("application/json");
+        return jsonWith(users);
     }
 
     private String createdResponse(Response response, User user) {

@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.List;
 import java.util.UUID;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,6 +23,7 @@ public class UserServiceShould {
     private UserService userService;
     private RegistrationDto registrationDto;
     private User user;
+    private List<User> users;
 
     @Mock
     private UserRepository userRepository;
@@ -55,9 +58,19 @@ public class UserServiceShould {
         assertThat(result).isEqualTo(user);
     }
 
+    @Test
+    public void returnAllUsers() {
+        when(userRepository.all()).thenReturn(users);
+
+        List<User> result = userService.allUsers();
+
+        assertThat(result).isEqualTo(users);
+    }
+
     private void initMocksBehavior() {
         registrationDto = new RegistrationDto(USERNAME, PASSWORD, ABOUT);
         user = new User(ID, USERNAME, PASSWORD, ABOUT);
+        users = asList(user);
         when(userIdGenerator.next()).thenReturn(ID);
     }
 }

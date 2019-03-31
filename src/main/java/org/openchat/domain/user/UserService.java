@@ -1,5 +1,7 @@
 package org.openchat.domain.user;
 
+import java.util.List;
+
 public class UserService {
     private UserRepository userRepository;
     private UserIdGenerator userIdGenerator;
@@ -14,6 +16,10 @@ public class UserService {
         User user = userFrom(registrationDto);
         userRepository.save(user);
         return user;
+    }
+
+    public List<User> allUsers() {
+        return userRepository.all();
     }
 
     private void validateUsernameOf(RegistrationDto registrationDto) {

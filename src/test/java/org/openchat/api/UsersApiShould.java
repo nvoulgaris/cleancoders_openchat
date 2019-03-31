@@ -1,5 +1,6 @@
 package org.openchat.api;
 
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +12,10 @@ import org.openchat.domain.user.UsernameAlreadyInUseException;
 import spark.Request;
 import spark.Response;
 
+import java.util.List;
 import java.util.UUID;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +31,7 @@ public class UsersApiShould {
     private UsersApi usersApi;
     private RegistrationDto registrationDto;
     private User user;
+    private List<User> users;
 
     @Mock
     private Request request;
@@ -69,11 +73,22 @@ public class UsersApiShould {
         assertThat(result).isEqualTo(jsonWith(user));
     }
 
+    @Test
+    public void returnAllUsers() {
+        String result = usersApi.allUsers(request, response);
+
+        verify(response).status(200);
+        verify(response).type("application/json");
+        assertThat(result).isEqualTo(jsonWith(users));
+    }
+
     private void initMocksBehavior() {
         registrationDto = new RegistrationDto(USERNAME, PASSWORD, ABOUT);
         user = new User(ID, USERNAME, PASSWORD, ABOUT);
+        users = asList(user);
         when(request.body()).thenReturn(jsonWith(registrationDto));
         when(userService.createFrom(registrationDto)).thenReturn(user);
+        when(userService.allUsers()).thenReturn(users);
     }
 
     private String jsonWith(RegistrationDto registrationDto) {
@@ -84,11 +99,20 @@ public class UsersApiShould {
                 .toString();
     }
 
+    private String jsonWith(List<User> users) {
+        JsonArray json = new JsonArray();
+        users.forEach(user -> json.add(jsonObjectWith(user)));
+        return json.toString();
+    }
+
     private String jsonWith(User user) {
+        return jsonObjectWith(user).toString();
+    }
+
+    private JsonObject jsonObjectWith(User user) {
         return new JsonObject()
                 .add("id", user.getId())
                 .add("username", user.getUsername())
-                .add("about", user.getAbout())
-                .toString();
+                .add("about", user.getAbout());
     }
 }

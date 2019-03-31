@@ -1,8 +1,6 @@
 package org.openchat.domain.user;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class UserRepository {
 
@@ -30,5 +28,9 @@ public class UserRepository {
 
     private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
         return !user.getPassword().equals(credentials.getPassword());
+    }
+
+    public List<User> all() {
+        return new ArrayList<>(users.values());
     }
 }
