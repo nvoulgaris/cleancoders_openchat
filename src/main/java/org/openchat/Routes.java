@@ -40,7 +40,10 @@ public class Routes {
         userRepository = new UserRepository();
         userIdGenerator = new UserIdGenerator();
         userService = new UserService(userRepository, userIdGenerator);
+        postRepository = new PostRepository();
         languageValidator = new LanguageValidator();
+        clock = new Clock();
+        postIdGenerator = new PostIdGenerator();
         postService = new PostService(postRepository, languageValidator, clock, postIdGenerator);
         usersApi = new UsersApi(userService);
         loginApi = new LoginApi(userRepository);

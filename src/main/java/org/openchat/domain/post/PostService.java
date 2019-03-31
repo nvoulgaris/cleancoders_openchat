@@ -3,10 +3,11 @@ package org.openchat.domain.post;
 import org.openchat.infrastructure.Clock;
 
 public class PostService {
-    private final PostRepository postRepository;
+
+    private PostRepository postRepository;
     private LanguageValidator languageValidator;
-    private final Clock clock;
-    private final PostIdGenerator postIdGenerator;
+    private Clock clock;
+    private PostIdGenerator postIdGenerator;
 
     public PostService(PostRepository postRepository, LanguageValidator languageValidator, Clock clock, PostIdGenerator postIdGenerator) {
         this.postRepository = postRepository;
