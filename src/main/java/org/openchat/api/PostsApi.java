@@ -8,8 +8,11 @@ import org.openchat.domain.post.PostService;
 import spark.Request;
 import spark.Response;
 
+import java.util.List;
+
 import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
 import static org.openchat.infrastructure.PostParser.jsonWith;
 
 public class PostsApi {
@@ -32,6 +35,14 @@ public class PostsApi {
         } catch (InappropriateLanguageException e) {
             return badRequestResponse(response);
         }
+    }
+
+    public String postsByUser(Request request, Response response) {
+        String userId = request.params("userId");
+        List<Post> posts = postService.postsBy(userId);
+        response.status(OK_200);
+        response.type("application/json");
+        return jsonWith(posts);
     }
 
     private String createdResponse(Response response, Post post) {

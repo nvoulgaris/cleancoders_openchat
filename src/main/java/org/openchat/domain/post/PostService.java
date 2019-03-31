@@ -2,6 +2,8 @@ package org.openchat.domain.post;
 
 import org.openchat.infrastructure.Clock;
 
+import java.util.List;
+
 public class PostService {
 
     private PostRepository postRepository;
@@ -21,5 +23,9 @@ public class PostService {
         Post post = new Post(postIdGenerator.next(), userId, text, clock.now());
         postRepository.save(post);
         return post;
+    }
+
+    public List<Post> postsBy(String userId) {
+        throw new UnsupportedOperationException();
     }
 }

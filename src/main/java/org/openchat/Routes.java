@@ -64,5 +64,6 @@ public class Routes {
         post("users", (req, res) -> usersApi.register(req, res));
         post("login", (req, res) -> loginApi.login(req, res));
         post("users/:userId/timeline", (req, res) -> postsApi.create(req, res));
+        get("users/:userId/timeline", (req, res) -> postsApi.postsByUser(req, res));
     }
 }

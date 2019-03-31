@@ -1,5 +1,6 @@
 package org.openchat.api;
 
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +12,10 @@ import spark.Request;
 import spark.Response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +31,7 @@ public class PostsApiShould {
 
     private PostsApi postsApi;
     private Post post;
+    private List<Post> posts;
 
     @Mock
     private Request request;
@@ -64,8 +68,20 @@ public class PostsApiShould {
         assertThat(result).isEqualTo(jsonWith(post));
     }
 
+    @Test
+    public void returnAllPostsByAUser() {
+        when(postService.postsBy(USER_ID)).thenReturn(posts);
+
+        String result = postsApi.postsByUser(request, response);
+
+        verify(response).status(200);
+        verify(response).type("application/json");
+        assertThat(result).isEqualTo(jsonWith(posts));
+    }
+
     private void initMocksBehavior() {
         post = new Post(POST_ID, USER_ID, TEXT, DATE_TIME);
+        posts = asList(post);
         when(request.params("userId")).thenReturn(USER_ID);
     }
 
@@ -77,6 +93,12 @@ public class PostsApiShould {
     private void mockValidPost() {
         when(request.body()).thenReturn(jsonWith(TEXT));
         when(postService.createPost(USER_ID, TEXT)).thenReturn(post);
+    }
+
+    private String jsonWith(List<Post> posts) {
+        JsonArray json = new JsonArray();
+        posts.forEach(post -> json.add(jsonWith(post)));
+        return json.toString();
     }
 
     private String jsonWith(String text) {
