@@ -4,6 +4,9 @@ import org.openchat.infrastructure.Clock;
 
 import java.util.List;
 
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
 public class PostService {
 
     private PostRepository postRepository;
@@ -26,6 +29,8 @@ public class PostService {
     }
 
     public List<Post> postsBy(String userId) {
-        throw new UnsupportedOperationException();
+        return postRepository.postsBy(userId).stream()
+                .sorted(comparing(Post::getDateTime).reversed())
+                .collect(toList());
     }
 }
