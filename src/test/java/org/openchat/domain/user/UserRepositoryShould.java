@@ -19,10 +19,16 @@ public class UserRepositoryShould {
     private static final String ABOUT = "about me";
     private static final String INVALID_USERNAME = "an invalid username";
     private static final String INVALID_PASSWORD = "an invalid password";
+    private static final String FOLLOWER_ID = UUID.randomUUID().toString();
+    private static final String FOLLOWER_ID_2 = UUID.randomUUID().toString();
+    private static final String FOLLOWEE_ID = UUID.randomUUID().toString();
+    private static final String FOLLOWEE_ID_2 = UUID.randomUUID().toString();
 
     private UserRepository userRepository;
     private User user1;
     private User user2;
+    private Following following1;
+    private Following following2;
 
     @Before
     public void setup() {
@@ -78,8 +84,18 @@ public class UserRepositoryShould {
         assertThat(result).containsExactlyInAnyOrder(user1, user2);
     }
 
+    @Test
+    public void informWhenAFollowingExists() {
+        userRepository.saveFollowing(following1);
+
+        assertThat(userRepository.followingExists(following1)).isTrue();
+        assertThat(userRepository.followingExists(following2)).isFalse();
+    }
+
     private void initMocksBehavior() {
         user1 = new User(ID, USERNAME, PASSWORD, ABOUT);
         user2 = new User(ID_2, USERNAME_2, PASSWORD, ABOUT);
+        following1 = new Following(FOLLOWER_ID, FOLLOWEE_ID);
+        following2 = new Following(FOLLOWER_ID_2, FOLLOWEE_ID_2);
     }
 }

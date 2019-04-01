@@ -5,9 +5,11 @@ import java.util.*;
 public class UserRepository {
 
     private Map<String, User> users;
+    private List<Following> followings;
 
     public UserRepository() {
         this.users = new HashMap<>();
+        this.followings = new ArrayList<>();
     }
 
     public boolean alreadyInUse(String username) {
@@ -27,18 +29,19 @@ public class UserRepository {
     }
 
     public boolean followingExists(Following following) {
-        throw new UnsupportedOperationException();
-    }
-
-    private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
-        return !user.getPassword().equals(credentials.getPassword());
+        return followings.stream()
+                .anyMatch(f -> following.equals(f));
     }
 
     public void saveFollowing(Following following) {
-        throw new UnsupportedOperationException();
+        followings.add(following);
     }
 
     public List<User> all() {
         return new ArrayList<>(users.values());
+    }
+
+    private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
+        return !user.getPassword().equals(credentials.getPassword());
     }
 }
