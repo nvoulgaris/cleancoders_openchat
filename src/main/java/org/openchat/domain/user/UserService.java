@@ -11,7 +11,7 @@ public class UserService {
         this.userIdGenerator = userIdGenerator;
     }
 
-    public User createFrom(RegistrationDto registrationDto) throws UsernameAlreadyInUseException {
+    public User createUserFrom(RegistrationDto registrationDto) throws UsernameAlreadyInUseException {
         validateUsernameOf(registrationDto);
         User user = userFrom(registrationDto);
         userRepository.save(user);
@@ -34,5 +34,9 @@ public class UserService {
                 registrationDto.getPassword(),
                 registrationDto.getAbout()
         );
+    }
+
+    public void createFollowing(Following following) {
+        throw new UnsupportedOperationException();
     }
 }

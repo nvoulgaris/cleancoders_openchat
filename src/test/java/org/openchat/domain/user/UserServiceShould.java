@@ -41,19 +41,19 @@ public class UserServiceShould {
     public void throwExceptionWhenUsernameIsAlreadyInUse() {
         when(userRepository.alreadyInUse(USERNAME)).thenReturn(true);
 
-        userService.createFrom(registrationDto);
+        userService.createUserFrom(registrationDto);
     }
 
     @Test
     public void createANewUser() {
-        userService.createFrom(registrationDto);
+        userService.createUserFrom(registrationDto);
 
         verify(userRepository).save(user);
     }
 
     @Test
     public void returnTheNewlyCreatedUser() {
-        User result = userService.createFrom(registrationDto);
+        User result = userService.createUserFrom(registrationDto);
 
         assertThat(result).isEqualTo(user);
     }

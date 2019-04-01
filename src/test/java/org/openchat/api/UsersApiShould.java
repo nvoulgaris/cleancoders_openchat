@@ -51,12 +51,12 @@ public class UsersApiShould {
     public void createANewUser() {
         usersApi.register(request, response);
 
-        verify(userService).createFrom(registrationDto);
+        verify(userService).createUserFrom(registrationDto);
     }
 
     @Test
     public void returnErrorWhenCreatingAUserWithExistingUsername() {
-        when(userService.createFrom(registrationDto)).thenThrow(new UsernameAlreadyInUseException());
+        when(userService.createUserFrom(registrationDto)).thenThrow(new UsernameAlreadyInUseException());
 
         String result = usersApi.register(request, response);
 
@@ -87,7 +87,7 @@ public class UsersApiShould {
         user = new User(ID, USERNAME, PASSWORD, ABOUT);
         users = asList(user);
         when(request.body()).thenReturn(jsonWith(registrationDto));
-        when(userService.createFrom(registrationDto)).thenReturn(user);
+        when(userService.createUserFrom(registrationDto)).thenReturn(user);
         when(userService.allUsers()).thenReturn(users);
     }
 

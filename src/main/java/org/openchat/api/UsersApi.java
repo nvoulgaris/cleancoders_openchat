@@ -29,7 +29,7 @@ public class UsersApi {
     public String register(Request request, Response response) {
         RegistrationDto registrationDto = registrationDtoFrom(request);
         try {
-            User user = userService.createFrom(registrationDto);
+            User user = userService.createUserFrom(registrationDto);
             return createdResponse(response, user);
         } catch (UsernameAlreadyInUseException e) {
             return badRequestResponse(response);

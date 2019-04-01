@@ -1,5 +1,6 @@
 package org.openchat;
 
+import org.openchat.api.FollowingsApi;
 import org.openchat.api.LoginApi;
 import org.openchat.api.PostsApi;
 import org.openchat.api.UsersApi;
@@ -29,6 +30,7 @@ public class Routes {
     private UsersApi usersApi;
     private LoginApi loginApi;
     private PostsApi postsApi;
+    private FollowingsApi followingsApi;
 
     public void create() {
         createApis();
@@ -48,6 +50,7 @@ public class Routes {
         usersApi = new UsersApi(userService);
         loginApi = new LoginApi(userRepository);
         postsApi = new PostsApi(postService);
+        followingsApi = new FollowingsApi(userService);
     }
 
     private void swaggerRoutes() {
@@ -66,5 +69,6 @@ public class Routes {
         post("users/:userId/timeline", (req, res) -> postsApi.create(req, res));
         get("users/:userId/timeline", (req, res) -> postsApi.postsByUser(req, res));
         get("users", (req, res) -> usersApi.allUsers(req, res));
+        post("followings", (req, res) -> followingsApi.create(req, res));
     }
 }
