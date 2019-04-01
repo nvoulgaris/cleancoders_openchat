@@ -22,6 +22,13 @@ public class UserService {
         return userRepository.all();
     }
 
+    public void createFollowing(Following following) {
+        if (userRepository.followingExists(following))
+            throw new FollowingAlreadyExistsException();
+
+        userRepository.saveFollowing(following);
+    }
+
     private void validateUsernameOf(RegistrationDto registrationDto) {
         if (userRepository.alreadyInUse(registrationDto.getUsername()))
             throw new UsernameAlreadyInUseException();
@@ -34,9 +41,5 @@ public class UserService {
                 registrationDto.getPassword(),
                 registrationDto.getAbout()
         );
-    }
-
-    public void createFollowing(Following following) {
-        throw new UnsupportedOperationException();
     }
 }

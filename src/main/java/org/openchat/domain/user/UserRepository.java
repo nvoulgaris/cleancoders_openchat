@@ -26,8 +26,16 @@ public class UserRepository {
             return Optional.of(user);
     }
 
+    public boolean followingExists(Following following) {
+        throw new UnsupportedOperationException();
+    }
+
     private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
         return !user.getPassword().equals(credentials.getPassword());
+    }
+
+    public void saveFollowing(Following following) {
+        throw new UnsupportedOperationException();
     }
 
     public List<User> all() {

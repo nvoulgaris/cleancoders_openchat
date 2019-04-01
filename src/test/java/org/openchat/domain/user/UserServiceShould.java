@@ -24,6 +24,7 @@ public class UserServiceShould {
     private RegistrationDto registrationDto;
     private User user;
     private List<User> users;
+    private Following following;
 
     @Mock
     private UserRepository userRepository;
@@ -65,6 +66,20 @@ public class UserServiceShould {
         List<User> result = userService.allUsers();
 
         assertThat(result).isEqualTo(users);
+    }
+
+    @Test(expected = FollowingAlreadyExistsException.class)
+    public void throwFollowingAlreadyExistsExceptionWhenFollowingExists() {
+        when(userRepository.followingExists(following)).thenReturn(true);
+
+        userService.createFollowing(following);
+    }
+
+    @Test
+    public void saveANewFollowing() {
+        userService.createFollowing(following);
+
+        verify(userRepository).saveFollowing(following);
     }
 
     private void initMocksBehavior() {
