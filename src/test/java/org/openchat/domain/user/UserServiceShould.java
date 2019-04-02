@@ -82,6 +82,13 @@ public class UserServiceShould {
         verify(userRepository).saveFollowing(following);
     }
 
+    @Test
+    public void getFolloweesForUser() {
+        userService.followeesFor(ID);
+
+        verify(userRepository).followeesFor(ID);
+    }
+
     private void initMocksBehavior() {
         registrationDto = new RegistrationDto(USERNAME, PASSWORD, ABOUT);
         user = new User(ID, USERNAME, PASSWORD, ABOUT);

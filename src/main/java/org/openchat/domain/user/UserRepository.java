@@ -1,36 +1,39 @@
 package org.openchat.domain.user;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class UserRepository {
 
-    private Map<String, User> users;
+    private List<User> users;
     private List<Following> followings;
 
     public UserRepository() {
-        this.users = new HashMap<>();
+        this.users = new ArrayList<>();
         this.followings = new ArrayList<>();
     }
 
     public boolean alreadyInUse(String username) {
-        return users.containsKey(username);
+        return users.stream()
+                .anyMatch(user -> user.getUsername().equals(username));
     }
 
     public void save(User user) {
-        users.put(user.getUsername(), user);
+        users.add(user);
     }
 
     public Optional<User> fetchWith(CredentialsDto credentials) {
-        User user = users.get(credentials.getUsername());
-        if (user == null || invalidPasswordFor(user, credentials))
-            return Optional.empty();
-        else
-            return Optional.of(user);
+        return users.stream()
+                .filter(user -> user.getUsername().equals(credentials.getUsername()) && user.getPassword().equals(credentials.getPassword()))
+                .findFirst();
     }
 
     public boolean followingExists(Following following) {
         return followings.stream()
-                .anyMatch(f -> following.equals(f));
+                .anyMatch(following::equals);
     }
 
     public void saveFollowing(Following following) {
@@ -38,10 +41,20 @@ public class UserRepository {
     }
 
     public List<User> all() {
-        return new ArrayList<>(users.values());
+        return users;
     }
 
-    private boolean invalidPasswordFor(User user, CredentialsDto credentials) {
-        return !user.getPassword().equals(credentials.getPassword());
+    public List<User> followeesFor(String followerId) {
+        return followings.stream()
+                .filter(following -> following.getFollowerId().equals(followerId))
+                .map(following -> userById(following.getFolloweeId()))
+                .collect(toList());
+    }
+
+    private User userById(String id) {
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }
