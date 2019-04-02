@@ -42,4 +42,8 @@ public class UserService {
                 registrationDto.getAbout()
         );
     }
+
+    public List<User> followeesFor(String followerId) {
+        throw new UnsupportedOperationException();
+    }
 }

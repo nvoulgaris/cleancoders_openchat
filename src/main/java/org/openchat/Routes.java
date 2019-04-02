@@ -70,5 +70,6 @@ public class Routes {
         get("users/:userId/timeline", (req, res) -> postsApi.postsByUser(req, res));
         get("users", (req, res) -> usersApi.allUsers(req, res));
         post("followings", (req, res) -> followingsApi.create(req, res));
+        get("followings/:followerId/followees", (req, res) -> followingsApi.getFollowees(req, res));
     }
 }

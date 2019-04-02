@@ -4,12 +4,15 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import org.openchat.domain.user.Following;
 import org.openchat.domain.user.FollowingAlreadyExistsException;
+import org.openchat.domain.user.User;
 import org.openchat.domain.user.UserService;
 import spark.Request;
 import spark.Response;
 
-import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
-import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+import java.util.List;
+
+import static org.eclipse.jetty.http.HttpStatus.*;
+import static org.openchat.infrastructure.UserParser.jsonWith;
 
 public class FollowingsApi {
 
@@ -39,5 +42,13 @@ public class FollowingsApi {
         String followerId = jsonObject.getString("followerId", DEFAULT_VALUE);
         String followeeId = jsonObject.getString("followeeId", DEFAULT_VALUE);
         return new Following(followerId, followeeId);
+    }
+
+    public String getFollowees(Request request, Response response) {
+        String followerId = request.params("followerId");
+        List<User> followees = userService.followeesFor(followerId);
+        response.status(OK_200);
+        response.type("application/json");
+        return jsonWith(followees);
     }
 }
