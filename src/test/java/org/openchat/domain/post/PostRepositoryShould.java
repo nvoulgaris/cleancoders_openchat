@@ -42,6 +42,19 @@ public class PostRepositoryShould {
         assertThat(result).isEqualTo(asList(postAlice1, postAlice2));
     }
 
+    @Test
+    public void returnPostByUsersIds() {
+        postRepository.save(postAlice1);
+        postRepository.save(postAlice2);
+        postRepository.save(postBob);
+
+        List<Post> alicesPosts = postRepository.postsBy(asList(ALICE_USER_ID));
+        List<Post> alicesAndBobsPosts = postRepository.postsBy(asList(ALICE_USER_ID, BOB_USER_ID));
+
+        assertThat(alicesPosts).isEqualTo(asList(postAlice1, postAlice2));
+        assertThat(alicesAndBobsPosts).isEqualTo(asList(postAlice1, postAlice2, postBob));
+    }
+
     private void initMocksBehavior() {
         postAlice1 = new Post(POST_ID_1, ALICE_USER_ID, TEXT, DATE_TIME);
         postAlice2 = new Post(POST_ID_2, ALICE_USER_ID, TEXT, DATE_TIME);

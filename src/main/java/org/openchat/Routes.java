@@ -1,13 +1,7 @@
 package org.openchat;
 
-import org.openchat.api.FollowingsApi;
-import org.openchat.api.LoginApi;
-import org.openchat.api.PostsApi;
-import org.openchat.api.UsersApi;
-import org.openchat.domain.post.LanguageValidator;
-import org.openchat.domain.post.PostIdGenerator;
-import org.openchat.domain.post.PostRepository;
-import org.openchat.domain.post.PostService;
+import org.openchat.api.*;
+import org.openchat.domain.post.*;
 import org.openchat.domain.user.UserIdGenerator;
 import org.openchat.domain.user.UserRepository;
 import org.openchat.domain.user.UserService;
@@ -31,6 +25,8 @@ public class Routes {
     private LoginApi loginApi;
     private PostsApi postsApi;
     private FollowingsApi followingsApi;
+    private WallService wallService;
+    private WallApi wallApi;
 
     public void create() {
         createApis();
@@ -51,6 +47,8 @@ public class Routes {
         loginApi = new LoginApi(userRepository);
         postsApi = new PostsApi(postService);
         followingsApi = new FollowingsApi(userService);
+        wallService = new WallService(userRepository, postRepository);
+        wallApi = new WallApi(wallService);
     }
 
     private void swaggerRoutes() {
@@ -71,5 +69,6 @@ public class Routes {
         get("users", (req, res) -> usersApi.allUsers(req, res));
         post("followings", (req, res) -> followingsApi.create(req, res));
         get("followings/:followerId/followees", (req, res) -> followingsApi.getFollowees(req, res));
+        get("users/:userId/wall", (req, res) -> wallApi.wallForUser(req, res));
     }
 }

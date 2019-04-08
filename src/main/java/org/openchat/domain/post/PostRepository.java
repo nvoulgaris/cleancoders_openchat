@@ -22,4 +22,10 @@ public class PostRepository {
                 .filter(post -> post.getUserId().equals(userId))
                 .collect(toList());
     }
+
+    public List<Post> postsBy(List<String> userIds) {
+        return posts.stream()
+                .filter(post -> userIds.contains(post.getUserId()))
+                .collect(toList());
+    }
 }
