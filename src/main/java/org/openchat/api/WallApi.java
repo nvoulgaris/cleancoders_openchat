@@ -21,7 +21,10 @@ public class WallApi {
     public String wallForUser(Request request, Response response) {
         String userId = request.params("userId");
         List<Post> wallPosts = wallService.wallFor(userId);
+        return okResponse(response, wallPosts);
+    }
 
+    private String okResponse(Response response, List<Post> wallPosts) {
         response.status(OK_200);
         response.type("application/json");
         return jsonWith(wallPosts);

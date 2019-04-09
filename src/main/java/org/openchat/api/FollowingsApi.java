@@ -29,12 +29,32 @@ public class FollowingsApi {
 
         try {
             userService.createFollowing(following);
-            response.status(CREATED_201);
-            return "Following created.";
+            return createdResponse(response);
         } catch (FollowingAlreadyExistsException e) {
-            response.status(BAD_REQUEST_400);
-            return "Following already exist.";
+            return badRequestResponse(response);
         }
+    }
+
+    public String getFollowees(Request request, Response response) {
+        String followerId = request.params("followerId");
+        List<User> followees = userService.followeesFor(followerId);
+        return okResponse(response, followees);
+    }
+
+    private String createdResponse(Response response) {
+        response.status(CREATED_201);
+        return "Following created.";
+    }
+
+    private String badRequestResponse(Response response) {
+        response.status(BAD_REQUEST_400);
+        return "Following already exist.";
+    }
+
+    private String okResponse(Response response, List<User> followees) {
+        response.status(OK_200);
+        response.type("application/json");
+        return jsonWith(followees);
     }
 
     private Following followingFrom(Request request) {
@@ -42,13 +62,5 @@ public class FollowingsApi {
         String followerId = jsonObject.getString("followerId", DEFAULT_VALUE);
         String followeeId = jsonObject.getString("followeeId", DEFAULT_VALUE);
         return new Following(followerId, followeeId);
-    }
-
-    public String getFollowees(Request request, Response response) {
-        String followerId = request.params("followerId");
-        List<User> followees = userService.followeesFor(followerId);
-        response.status(OK_200);
-        response.type("application/json");
-        return jsonWith(followees);
     }
 }
