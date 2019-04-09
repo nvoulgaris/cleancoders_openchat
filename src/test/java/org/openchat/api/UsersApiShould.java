@@ -1,7 +1,5 @@
 package org.openchat.api;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -20,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.openchat.infrastructure.UserTestParser.jsonWith;
 
 public class UsersApiShould {
 
@@ -89,30 +88,5 @@ public class UsersApiShould {
         when(request.body()).thenReturn(jsonWith(registrationDto));
         when(userService.createUserFrom(registrationDto)).thenReturn(user);
         when(userService.allUsers()).thenReturn(users);
-    }
-
-    private String jsonWith(RegistrationDto registrationDto) {
-        return new JsonObject()
-                .add("username", registrationDto.getUsername())
-                .add("password", registrationDto.getPassword())
-                .add("about", registrationDto.getAbout())
-                .toString();
-    }
-
-    private String jsonWith(List<User> users) {
-        JsonArray json = new JsonArray();
-        users.forEach(user -> json.add(jsonObjectWith(user)));
-        return json.toString();
-    }
-
-    private String jsonWith(User user) {
-        return jsonObjectWith(user).toString();
-    }
-
-    private JsonObject jsonObjectWith(User user) {
-        return new JsonObject()
-                .add("id", user.getId())
-                .add("username", user.getUsername())
-                .add("about", user.getAbout());
     }
 }

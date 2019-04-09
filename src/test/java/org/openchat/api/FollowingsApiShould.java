@@ -1,7 +1,5 @@
 package org.openchat.api;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,6 +17,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.openchat.infrastructure.UserTestParser.jsonWith;
 
 public class FollowingsApiShould {
 
@@ -31,7 +30,6 @@ public class FollowingsApiShould {
 
     private FollowingsApi followingsApi;
     private Following following;
-    private User followee;
     private List<User> followees;
 
     @Mock
@@ -86,32 +84,9 @@ public class FollowingsApiShould {
 
     private void initMocksBehavior() {
         following = new Following(FOLLOWER_ID, FOLLOWEE_ID);
-        followee = new User(USER_ID, USERNAME, PASSWORD, ABOUT);
+        User followee = new User(USER_ID, USERNAME, PASSWORD, ABOUT);
         followees = asList(followee);
         when(request.body()).thenReturn(jsonWith(following));
         when(request.params("followerId")).thenReturn(FOLLOWER_ID);
-    }
-
-    private String jsonWith(List<User> followees) {
-        JsonArray json = new JsonArray();
-        followees.forEach(followee -> json.add(jsonObjectWith(followee)));
-        return json.toString();
-    }
-
-    private String jsonWith(Following following) {
-        return jsonObjectWith(following).toString();
-    }
-
-    private JsonObject jsonObjectWith(Following following) {
-        return new JsonObject()
-                .add("followerId", following.getFollowerId())
-                .add("followeeId", following.getFolloweeId());
-    }
-
-    private JsonObject jsonObjectWith(User user) {
-        return new JsonObject()
-                .add("id", user.getId())
-                .add("username", user.getUsername())
-                .add("about", user.getAbout());
     }
 }

@@ -25,7 +25,6 @@ public class PostServiceShould {
 
     private PostService postService;
     private Post todayPost;
-    private Post yesterdayPost;
     private List<Post> posts;
     private List<Post> postsInReverseChronologicalOrder;
 
@@ -77,7 +76,7 @@ public class PostServiceShould {
 
     private void initMocksBehavior() {
         todayPost = new Post(POST_ID, USER_ID, TEXT, TODAY);
-        yesterdayPost = new Post(POST_ID, USER_ID, TEXT, YESTERDAY);
+        Post yesterdayPost = new Post(POST_ID, USER_ID, TEXT, YESTERDAY);
         posts = asList(yesterdayPost, todayPost);
         postsInReverseChronologicalOrder = asList(todayPost, yesterdayPost);
         when(clock.now()).thenReturn(TODAY);

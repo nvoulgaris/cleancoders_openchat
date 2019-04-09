@@ -1,6 +1,5 @@
 package org.openchat.api;
 
-import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.openchat.infrastructure.UserTestParser.jsonWith;
 
 public class LoginApiShould {
 
@@ -64,20 +64,5 @@ public class LoginApiShould {
         verify(response).status(200);
         verify(response).type("application/json");
         assertThat(result).isEqualTo(jsonWith(user));
-    }
-
-    private String jsonWith(CredentialsDto credentialsDto) {
-        return new JsonObject()
-                .add("username", credentialsDto.getUsername())
-                .add("password", credentialsDto.getPassword())
-                .toString();
-    }
-
-    private String jsonWith(User user) {
-        return new JsonObject()
-                .add("id", user.getId())
-                .add("username", user.getUsername())
-                .add("about", user.getAbout())
-                .toString();
     }
 }

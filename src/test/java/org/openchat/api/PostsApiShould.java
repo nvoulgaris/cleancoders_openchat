@@ -1,7 +1,5 @@
 package org.openchat.api;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,20 +10,18 @@ import spark.Request;
 import spark.Response;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.openchat.infrastructure.PostTestParser.jsonWith;
 
 public class PostsApiShould {
 
-    private static DateTimeFormatter formatter = ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private static final String POST_ID = UUID.randomUUID().toString();
     private static final String USER_ID = UUID.randomUUID().toString();
     private static final String TEXT = "Hello";
@@ -96,29 +92,5 @@ public class PostsApiShould {
     private void mockValidPost() {
         when(request.body()).thenReturn(jsonWith(TEXT));
         when(postService.createPost(USER_ID, TEXT)).thenReturn(post);
-    }
-
-    private String jsonWith(String text) {
-        return new JsonObject()
-                .add("text", text)
-                .toString();
-    }
-
-    private String jsonWith(List<Post> posts) {
-        JsonArray json = new JsonArray();
-        posts.forEach(post -> json.add(jsonObjectWith(post)));
-        return json.toString();
-    }
-
-    private String jsonWith(Post post) {
-        return jsonObjectWith(post).toString();
-    }
-
-    private JsonObject jsonObjectWith(Post post) {
-        return new JsonObject()
-                .add("postId", post.getPostId())
-                .add("userId", post.getUserId())
-                .add("text", post.getText())
-                .add("dateTime", formatter.format(post.getDateTime()));
     }
 }
